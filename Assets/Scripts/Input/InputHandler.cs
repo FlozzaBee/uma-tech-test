@@ -31,7 +31,10 @@ namespace Input
 
         public void OnInteract(CallbackContext context)
         {
-            // throw new System.NotImplementedException();
+            if (context.performed)
+            {
+                Systems.InputSystem.ActionDefinitions.Interact.Invoke();
+            }
         }
     }
 }

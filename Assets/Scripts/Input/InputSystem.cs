@@ -5,6 +5,8 @@ namespace Input
     public class InputSystem
     {
         private InputHandler _inputHandler = new();
+
+        public ActionDefinitions ActionDefinitions = new();
         
         public Vector2 HorizontalMovement { get; private set; }
         public float VerticalMovement { get; private set; }

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 //Simple first person flying movement
-public class CharacterController : MonoBehaviour
+public class FirstPersonCharacterController : MonoBehaviour
 {
     [SerializeField] private float _horizontalMoveSpeed = 1;
     [SerializeField] private float _verticalMoveSpeed = 1;
