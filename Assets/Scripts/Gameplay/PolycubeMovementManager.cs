@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using MathUtils = Utils.MathUtils;
 
 public class PolycubeMovementManager : MonoBehaviour
 {
@@ -11,13 +12,12 @@ public class PolycubeMovementManager : MonoBehaviour
 
     private bool _isMovingPolycube = false;
     private Polycube _currentlyHeldPolycube;
-    private Cube _selectedCubeOfPolycube;
 
     private Vector3Int _lastCellAlongRay;
     
     //Debug
     private List<Vector3> _voxelIntersections = new List<Vector3>();
-    private List<Vector3Int> _voxelsTravered = new List<Vector3Int>();
+    private List<Vector3Int> _voxelsAlongRay = new List<Vector3Int>();
     
     private void Start()
     {
@@ -27,11 +27,17 @@ public class PolycubeMovementManager : MonoBehaviour
     private void OnEnable()
     {
         Systems.InputSystem.ActionDefinitions.Interact.Subscribe(OnInteract);
+        Systems.InputSystem.ActionDefinitions.RotateX.Subscribe(OnRotateX);
+        Systems.InputSystem.ActionDefinitions.RotateY.Subscribe(OnRotateY);
+        Systems.InputSystem.ActionDefinitions.RotateZ.Subscribe(OnRotateZ);
     }
 
     private void OnDisable()
     {
         Systems.InputSystem.ActionDefinitions.Interact.Unsubscribe(OnInteract);
+        Systems.InputSystem.ActionDefinitions.RotateX.Unsubscribe(OnRotateX);
+        Systems.InputSystem.ActionDefinitions.RotateY.Unsubscribe(OnRotateY);
+        Systems.InputSystem.ActionDefinitions.RotateZ.Unsubscribe(OnRotateZ);
     }
 
     private void Update()
@@ -44,7 +50,18 @@ public class PolycubeMovementManager : MonoBehaviour
         //Cast ray through grid, finding all unoccupied cells along the ray
         _lastCellAlongRay = GetFurthestCellAlongRay();
 
-        _currentlyHeldPolycube.transform.position = _lastCellAlongRay - _selectedCubeOfPolycube.transform.localPosition;
+        //Check if a few of the last intersections are valid placement
+        for (int i = 1; i < 6; i++)
+        {
+            var candidateCell = _voxelsAlongRay[^i];
+            //Account for offset from pivot
+            Vector3Int candidatePolycubePosition = Vector3Int.RoundToInt(candidateCell - _currentlyHeldPolycube.GetPivotOffset()); 
+            if (_gameGrid.IsPolycubePositionValid(_currentlyHeldPolycube, candidatePolycubePosition))
+            {
+                _currentlyHeldPolycube.SetTargetPosition(candidateCell);
+                break;
+            }
+        }
     }
     
     private void OnInteract()
@@ -53,7 +70,8 @@ public class PolycubeMovementManager : MonoBehaviour
         {
             //Try drop polycube
             //if successful
-            
+            _currentlyHeldPolycube.EndInteract();
+            _gameGrid.SetPolycubeState(_currentlyHeldPolycube, true);
             _isMovingPolycube = false;
             _currentlyHeldPolycube = null;
         }
@@ -65,34 +83,67 @@ public class PolycubeMovementManager : MonoBehaviour
                 if (hit.transform.TryGetComponent(out Cube cube))
                 {
                     _currentlyHeldPolycube = cube.GetPolycube();
-                    _selectedCubeOfPolycube = cube;
+                    _currentlyHeldPolycube.StartInteract(cube);
                     _isMovingPolycube = true;
-                    Debug.Log($"Hit cube {cube.GetPolycube().name}");
+                    _gameGrid.SetPolycubeState(_currentlyHeldPolycube, false);
                 }
             }
         }
     }
+    
+    private void OnRotateX()
+    {
+        if (_isMovingPolycube)
+        {
+            _currentlyHeldPolycube.RotateAroundPivot(Vector3.right);
+        }
+    }
+    
+    private void OnRotateY()
+    {
+        if (_isMovingPolycube)
+        {
+            _currentlyHeldPolycube.RotateAroundPivot(Vector3.up);
+        }
+    }
+    
+    private void OnRotateZ()
+    {
+        if (_isMovingPolycube)
+        {
+            _currentlyHeldPolycube.RotateAroundPivot(Vector3.forward);
+        }
+    }
 
-    // Fast Voxel Traversal Algorithm 
+    
+    // Fast Voxel Traversal Algorithm to get the grid cell we are looking at.
     private Vector3Int GetFurthestCellAlongRay()
     {
+        #if UNITY_EDITOR
+        //Recording voxel intersections for debug only.
         _voxelIntersections.Clear();
-        _voxelsTravered.Clear();
+        #endif
+        
+        _voxelsAlongRay.Clear();
         Vector3 start = _cam.position;
         Vector3 dir = _cam.forward;
+        //Start from current cell
         Vector3Int cell = Vector3Int.RoundToInt(start);
 
-        if (!IsInsideGrid(cell))
+        // Unfortunate side effect of this method is that the camera must be in the grid for it to work :(
+        // Could be fixed but for now it's fine.
+        if (!_gameGrid.IsCellInsideGrid(cell))
         {
             return default;
         }
 
         Vector3Int lastValid = cell;
         
+        //Until we hit a blocked cell/exit the grid
         int maxSteps = 500; 
         for (int i = 0; i < maxSteps; i++)
         {
-            // Calculate distances to the next voxel boundaries along each axis
+            // Calculate distances to the next voxel boundaries for each axis
             Vector3 tMax = new Vector3(
                 dir.x != 0
                     ? ((dir.x > 0 ? cell.x + 0.5f : cell.x - 0.5f) - start.x) / dir.x
@@ -110,9 +161,9 @@ public class PolycubeMovementManager : MonoBehaviour
                     : float.PositiveInfinity
             );
 
-            float t;
 
             // Find the axis with the shortest step, which is the next voxel the ray enters.
+            float t;
             if (tMax.x < tMax.y && tMax.x < tMax.z)
             {
                 t = tMax.x;
@@ -129,31 +180,28 @@ public class PolycubeMovementManager : MonoBehaviour
                 cell.z += dir.z > 0 ? 1 : -1;
             }
 
-            Vector3 intersectionPoint = start + dir * t;
-            _voxelIntersections.Add(intersectionPoint);;
+            
 
-            if (!IsInsideGrid(cell) || _gameGrid.IsCellOccupied(cell))
+            if (!_gameGrid.IsCellInsideGrid(cell) || _gameGrid.IsCellOccupied(cell))
             {
                 break;
             }
             
-            _voxelsTravered.Add(cell);
-
+            _voxelsAlongRay.Add(cell);
             lastValid = cell;
+            
+#if UNITY_EDITOR
+            Vector3 intersectionPoint = start + dir * t;
+            _voxelIntersections.Add(intersectionPoint);
+#endif
         }
-        
-        Debug.Log(lastValid);
 
         return lastValid;
     }
     
-    private bool IsInsideGrid(Vector3Int cell)
-    {
-        return cell.x >= 0 && cell.x < _gameGrid.GridSize.x &&
-               cell.y >= 0 && cell.y < _gameGrid.GridSize.y &&
-               cell.z >= 0 && cell.z < _gameGrid.GridSize.z;
-    }
+    
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (_isMovingPolycube)
@@ -172,11 +220,11 @@ public class PolycubeMovementManager : MonoBehaviour
                 Gizmos.DrawSphere(voxelIntersection, 0.1f);
             }
 
-            foreach (var voxel in _voxelsTravered)
+            foreach (var voxel in _voxelsAlongRay)
             {
                 Gizmos.DrawWireCube(voxel, Vector3.one);
             }
         }
-        
     }
+#endif
 }

@@ -36,5 +36,29 @@ namespace Input
                 Systems.InputSystem.ActionDefinitions.Interact.Invoke();
             }
         }
+
+        public void OnRotateX(CallbackContext context)
+        {
+            if (context.performed)
+            {
+                Systems.InputSystem.ActionDefinitions.RotateX.Invoke();
+            }
+        }
+
+        public void OnRotateY(CallbackContext context)
+        {
+            if (context.performed)
+            {
+                Systems.InputSystem.ActionDefinitions.RotateY.Invoke();
+            }
+        }
+
+        public void OnRotateZ(CallbackContext context)
+        {
+            if (context.performed)
+            {
+                Systems.InputSystem.ActionDefinitions.RotateZ.Invoke();
+            }
+        }
     }
 }

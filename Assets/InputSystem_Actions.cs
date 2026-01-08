@@ -127,6 +127,33 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateX"",
+                    ""type"": ""Button"",
+                    ""id"": ""708e8425-3b43-4e69-b1f0-0572541f18ca"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateY"",
+                    ""type"": ""Button"",
+                    ""id"": ""fa246962-c9d2-4b3c-b7e9-65a834bf233d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateZ"",
+                    ""type"": ""Button"",
+                    ""id"": ""403df20b-6c1f-4e6b-a238-57f9ecd08071"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -327,6 +354,39 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Move Vertical"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7fa15b69-18d9-41e5-96ff-c0cfa34f4f4e"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateX"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ffcc8565-9fe9-46b0-b550-30079fa5cec9"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateY"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b043b1d8-5c4b-4232-97ce-b87ea78b3aea"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateZ"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -916,6 +976,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_MoveVertical = m_Player.FindAction("Move Vertical", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_RotateX = m_Player.FindAction("RotateX", throwIfNotFound: true);
+        m_Player_RotateY = m_Player.FindAction("RotateY", throwIfNotFound: true);
+        m_Player_RotateZ = m_Player.FindAction("RotateZ", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1013,6 +1076,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_MoveVertical;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_RotateX;
+    private readonly InputAction m_Player_RotateY;
+    private readonly InputAction m_Player_RotateZ;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1040,6 +1106,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Interact".
         /// </summary>
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/RotateX".
+        /// </summary>
+        public InputAction @RotateX => m_Wrapper.m_Player_RotateX;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/RotateY".
+        /// </summary>
+        public InputAction @RotateY => m_Wrapper.m_Player_RotateY;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/RotateZ".
+        /// </summary>
+        public InputAction @RotateZ => m_Wrapper.m_Player_RotateZ;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1078,6 +1156,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @RotateX.started += instance.OnRotateX;
+            @RotateX.performed += instance.OnRotateX;
+            @RotateX.canceled += instance.OnRotateX;
+            @RotateY.started += instance.OnRotateY;
+            @RotateY.performed += instance.OnRotateY;
+            @RotateY.canceled += instance.OnRotateY;
+            @RotateZ.started += instance.OnRotateZ;
+            @RotateZ.performed += instance.OnRotateZ;
+            @RotateZ.canceled += instance.OnRotateZ;
         }
 
         /// <summary>
@@ -1101,6 +1188,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @RotateX.started -= instance.OnRotateX;
+            @RotateX.performed -= instance.OnRotateX;
+            @RotateX.canceled -= instance.OnRotateX;
+            @RotateY.started -= instance.OnRotateY;
+            @RotateY.performed -= instance.OnRotateY;
+            @RotateY.canceled -= instance.OnRotateY;
+            @RotateZ.started -= instance.OnRotateZ;
+            @RotateZ.performed -= instance.OnRotateZ;
+            @RotateZ.canceled -= instance.OnRotateZ;
         }
 
         /// <summary>
@@ -1429,6 +1525,27 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteract(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RotateX" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRotateX(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RotateY" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRotateY(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RotateZ" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRotateZ(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
