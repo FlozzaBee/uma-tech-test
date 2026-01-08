@@ -77,7 +77,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8b08bf5acb9f404aac378ed25a54e25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Polycube
+  _color: {r: 0, g: 0, b: 0, a: 0}
   _pivot: {fileID: 5058130092605591286}
+  _selectedCubeColor: {r: 0, g: 0.7490196, b: 1, a: 1}
   _movementSmoothing: 16
   _rotationSmoothing: 20
   _cubes:
@@ -85,7 +87,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  _cubeOffsets: []
 --- !u!1001 &8468420893262235206
 PrefabInstance:
   m_ObjectHideFlags: 0

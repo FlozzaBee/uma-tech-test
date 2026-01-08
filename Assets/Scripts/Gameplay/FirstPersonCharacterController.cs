@@ -1,22 +1,29 @@
-using System;
 using UnityEngine;
+using Utils;
 
-//Simple first person flying movement
+// Simple first person flying movement
 public class FirstPersonCharacterController : MonoBehaviour
 {
     [SerializeField] private float _horizontalMoveSpeed = 1;
     [SerializeField] private float _verticalMoveSpeed = 1;
     [SerializeField] private float _lookSensitivity = 1;
+    [SerializeField] private float _movementSmoothing = 16;
     [SerializeField] private Camera _cam;
 
     [SerializeField] private float _maxPitch = 89;
 
+    private Vector3 _targetPosition;
+
     private float _pitch = 0;
+
+    private Vector3Int GridSize => GameGrid.Instance.GridSize;
 
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        _targetPosition = transform.position;
     }
 
     private void Update()
@@ -35,7 +42,16 @@ public class FirstPersonCharacterController : MonoBehaviour
             transform.forward * horizontalMovement.y + 
             Vector3.up * verticalMovement;
 
-        transform.position += moveDir * Time.deltaTime;
+        _targetPosition += moveDir * Time.deltaTime;
+        
+        //Clamp position within grid
+        _targetPosition.x = Mathf.Clamp(_targetPosition.x, -0.5f, GridSize.x - 0.5f);
+        _targetPosition.y = Mathf.Clamp(_targetPosition.y, -0.5f, GridSize.y - 0.5f);
+        _targetPosition.z = Mathf.Clamp(_targetPosition.z, -0.5f, GridSize.z - 0.5f);
+        
+        // Smooth movement
+        transform.position =
+            MathUtils.ExpDecay(transform.position, _targetPosition, _movementSmoothing, Time.deltaTime);
     }
 
     private void HandleLook()

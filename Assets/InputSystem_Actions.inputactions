@@ -226,17 +226,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "399bc5f9-9728-4d13-9d38-f190f0d8024e",
-                    "path": "<Keyboard>/p",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "1D Axis",
                     "id": "723f972c-aa70-4af3-864a-4ebb65750f28",
                     "path": "1DAxis",

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 using MathUtils = Utils.MathUtils;
@@ -9,7 +7,6 @@ public class Polycube : MonoBehaviour
 {
     [SerializeField] private Color _color;
     [SerializeField] private Transform _pivot;
-    // TODO: make this a const or something x
     [SerializeField] private float _movementSmoothing = 16f;
     [SerializeField] private float _rotationSmoothing = 16f;
     
@@ -105,6 +102,8 @@ public class Polycube : MonoBehaviour
         {
             cube.transform.SetParent(_pivot, true);
         }
+        
+        selectedCube.SetHighlight(Cube.HighlightType.Selected);
     }
 
     public void EndInteract()
@@ -113,6 +112,19 @@ public class Polycube : MonoBehaviour
         if (_isRotating)
         {
             EndCurrentRotation();
+        }
+
+        foreach (Cube cube in _cubes)
+        {
+            cube.SetHighlight(Cube.HighlightType.None);
+        }
+    }
+
+    public void IsHoveredOver(bool isHoveredOver)
+    {
+        foreach (Cube cube in _cubes)
+        {
+            cube.SetHighlight(isHoveredOver ? Cube.HighlightType.Hovered : Cube.HighlightType.None);
         }
     }
 

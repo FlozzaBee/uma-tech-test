@@ -1,26 +1,27 @@
 using System;
 using UnityEngine;
 
-public class GameGrid : MonoBehaviour
+public class GameGrid : Singleton<GameGrid> // Making it a singleton since there's only one of these and it needs to be
+                                            // accessed from a few different places
 {
     [SerializeField] private Vector3Int _gridSize = new Vector3Int(32, 16, 32);
     public Vector3Int GridSize => _gridSize;
 
     [SerializeField] private Polycube[] _polycubes;
 
-    public struct Cell
+    private struct Cell
     {
         public bool IsOccupied;
     }
     
-    //3d array of cells
+    // 3d array of cells
     private Cell[,,] _cells;
 
     private void Start()
     {
         _cells = new Cell[_gridSize.x, _gridSize.y, _gridSize.z];
         
-        //Populate grid from existing polycubes
+        // Populate grid from existing polycubes
         foreach (Polycube polycube in _polycubes)
         {
             polycube.Init();

@@ -223,6 +223,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cube (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4918751029609874247, guid: 93628f3f486c54f4a8d6c03684990ab4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7435815117945259669, guid: 93628f3f486c54f4a8d6c03684990ab4, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 7435815117945259669, guid: 93628f3f486c54f4a8d6c03684990ab4, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 7435815117945259669, guid: 93628f3f486c54f4a8d6c03684990ab4, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.08
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -295,6 +311,22 @@ PrefabInstance:
     - target: {fileID: 4131936850472762615, guid: 93628f3f486c54f4a8d6c03684990ab4, type: 3}
       propertyPath: m_Name
       value: Cube (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918751029609874247, guid: 93628f3f486c54f4a8d6c03684990ab4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7435815117945259669, guid: 93628f3f486c54f4a8d6c03684990ab4, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 7435815117945259669, guid: 93628f3f486c54f4a8d6c03684990ab4, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 7435815117945259669, guid: 93628f3f486c54f4a8d6c03684990ab4, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.08
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1056,7 +1088,7 @@ Transform:
   m_GameObject: {fileID: 655480139}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.5, y: -0.5, z: 15.5}
+  m_LocalPosition: {x: 15.5, y: -0.53, z: 15.5}
   m_LocalScale: {x: 3.2, y: 1, z: 3.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1109,7 +1141,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 2c6eb7d13d4824637b2d3967aad27217, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1357,6 +1389,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1911489887}
     m_Modifications:
+    - target: {fileID: 3586894930936562945, guid: 10e3e1a704488495490a3534d14f83c0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5754630916193811853, guid: 10e3e1a704488495490a3534d14f83c0, type: 3}
       propertyPath: m_Name
       value: Polycube I
@@ -2250,6 +2286,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cube (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4918751029609874247, guid: 93628f3f486c54f4a8d6c03684990ab4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7435815117945259669, guid: 93628f3f486c54f4a8d6c03684990ab4, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 7435815117945259669, guid: 93628f3f486c54f4a8d6c03684990ab4, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 7435815117945259669, guid: 93628f3f486c54f4a8d6c03684990ab4, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.08
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2479,7 +2531,7 @@ Transform:
   m_GameObject: {fileID: 1936924269}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 3.74, z: 3}
+  m_LocalPosition: {x: 9, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2498,7 +2550,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 334514cf06e704c3eadffe32a3565094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PolycubeMovementManager
-  _gameGrid: {fileID: 104154503}
 --- !u!1001 &2115638521
 PrefabInstance:
   m_ObjectHideFlags: 0
