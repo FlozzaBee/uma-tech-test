@@ -9,6 +9,7 @@ public class Polycube : MonoBehaviour
     [SerializeField] private Transform _pivot;
     [SerializeField] private float _movementSmoothing = 16f;
     [SerializeField] private float _rotationSmoothing = 16f;
+    [SerializeField] private Cube _cubePrefab;
     
     [SerializeField] private Cube[] _cubes;
 
@@ -189,5 +190,34 @@ public class Polycube : MonoBehaviour
         _pivot.rotation = _targetPivotRotation;
         
         UpdateCubeOffsets();
+    }
+    
+    // Save Resume
+    public SaveResumeSystem.PolycubeSaveData GetPolycubeSaveData()
+    {
+        SaveResumeSystem.PolycubeSaveData polycubeData = new SaveResumeSystem.PolycubeSaveData()
+        {
+            PolycubeName = gameObject.name,
+            PolycubeColor = _color,
+            PolycubePosition = Vector3Int.RoundToInt(transform.position),
+            CubeOffsets = _cubeOffsets,
+        };
+        return polycubeData;
+    }
+
+    public void SetStateFromSave(SaveResumeSystem.PolycubeSaveData saveData)
+    {
+        gameObject.name = saveData.PolycubeName;
+        transform.position = saveData.PolycubePosition;
+        _color = saveData.PolycubeColor;
+        _cubes = new Cube[saveData.CubeOffsets.Length];
+        
+        for (int i = 0; i < saveData.CubeOffsets.Length; i++)
+        {
+            Cube cube = Instantiate(_cubePrefab, transform);
+            _cubes[i] = cube;
+            cube.transform.localPosition = saveData.CubeOffsets[i];
+            cube.Init(this, _color);
+        }
     }
 }

@@ -43,17 +43,17 @@ public class PolycubeMovementManager : MonoBehaviour
     {
         if (_isMovingPolycube)
         {
-            //Cast ray through grid, finding all unoccupied cells along the ray
+            // Cast ray through grid, finding all unoccupied cells along the ray
             _lastCellAlongRay = GetFurthestCellAlongRay();
 
-            //Check if a few of the last intersections are valid placement
+            // Check if a few of the last intersections are valid placement
             int depthToCheck = Mathf.Min(_voxelsAlongRay.Count, 20);
             for (int i = 1; i < depthToCheck; i++)
             {
                 var candidateCell = _voxelsAlongRay[^i];
-                //Account for offset from pivot
+                // Account for offset from pivot
                 Vector3Int candidatePolycubePosition = Vector3Int.RoundToInt(candidateCell - _currentlyHeldPolycube.GetPivotOffset()); 
-                if (GameGrid.Instance.IsPolycubePositionValid(_currentlyHeldPolycube, candidatePolycubePosition))
+                if (Systems.GameGridSystem.IsPolycubePositionValid(_currentlyHeldPolycube, candidatePolycubePosition))
                 {
                     _currentlyHeldPolycube.SetTargetPosition(candidateCell);
                     break;
@@ -67,12 +67,17 @@ public class PolycubeMovementManager : MonoBehaviour
             {
                 if (cube.GetPolycube() != _currentlyHoveredPolycube)
                 {
-                    _currentlyHoveredPolycube?.IsHoveredOver(false);
+                    // Using ?.IsHoveredOver breaks here if the hovered object is destroyed (i.e. by loading a save),
+                    // so use explicit check
+                    if (_currentlyHoveredPolycube != null)  
+                    {
+                        _currentlyHoveredPolycube.IsHoveredOver(false);
+                    }
                     _currentlyHoveredPolycube = cube.GetPolycube();
                     _currentlyHoveredPolycube?.IsHoveredOver(true);
                 }
             }
-            else
+            else if(_currentlyHoveredPolycube != null)
             {
                 _currentlyHoveredPolycube?.IsHoveredOver(false);
                 _currentlyHoveredPolycube = null;
@@ -84,10 +89,8 @@ public class PolycubeMovementManager : MonoBehaviour
     {
         if (_isMovingPolycube)
         {
-            //Try drop polycube
-            //if successful
             _currentlyHeldPolycube.EndInteract();
-            GameGrid.Instance.SetPolycubeState(_currentlyHeldPolycube, true);
+            Systems.GameGridSystem.SetPolycubeState(_currentlyHeldPolycube, true);
             _isMovingPolycube = false;
             _currentlyHeldPolycube = null;
         }
@@ -103,7 +106,7 @@ public class PolycubeMovementManager : MonoBehaviour
                     _currentlyHeldPolycube = cube.GetPolycube();
                     _currentlyHeldPolycube.StartInteract(cube);
                     _isMovingPolycube = true;
-                    GameGrid.Instance.SetPolycubeState(_currentlyHeldPolycube, false);
+                    Systems.GameGridSystem.SetPolycubeState(_currentlyHeldPolycube, false);
                 }
             }
         }
@@ -138,19 +141,19 @@ public class PolycubeMovementManager : MonoBehaviour
     private Vector3Int GetFurthestCellAlongRay()
     {
         #if UNITY_EDITOR
-        //Recording voxel intersections for debug only.
+        // Recording voxel intersections for debug only.
         _voxelIntersections.Clear();
         #endif
         
         _voxelsAlongRay.Clear();
         Vector3 start = _cam.position;
         Vector3 dir = _cam.forward;
-        //Start from current cell
+        // Start from current cell
         Vector3Int cell = Vector3Int.RoundToInt(start);
 
         // Unfortunate side effect of this method is that the camera must be in the grid for it to work :(
         // Could be fixed but for now it's fine.
-        if (!GameGrid.Instance.IsCellInsideGrid(cell))
+        if (!Systems.GameGridSystem.IsCellInsideGrid(cell))
         {
             return default;
         }
@@ -200,7 +203,7 @@ public class PolycubeMovementManager : MonoBehaviour
 
             
 
-            if (!GameGrid.Instance.IsCellInsideGrid(cell) || GameGrid.Instance.IsCellOccupied(cell))
+            if (!Systems.GameGridSystem.IsCellInsideGrid(cell) || Systems.GameGridSystem.IsCellOccupied(cell))
             {
                 break;
             }
@@ -220,7 +223,7 @@ public class PolycubeMovementManager : MonoBehaviour
     
 
 #if UNITY_EDITOR
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (_isMovingPolycube)
         {

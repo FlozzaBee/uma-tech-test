@@ -60,5 +60,20 @@ namespace Input
                 Systems.InputSystem.ActionDefinitions.RotateZ.Invoke();
             }
         }
+
+        public void OnSave(CallbackContext context)
+        {
+            Systems.SaveResumeSystem.SaveState();
+        }
+
+        public void OnLoad(CallbackContext context)
+        {
+            Systems.SaveResumeSystem.TryLoadState();
+        }
+
+        public void OnReset(CallbackContext context)
+        {
+            Systems.SaveResumeSystem.ResetState();
+        }
     }
 }
