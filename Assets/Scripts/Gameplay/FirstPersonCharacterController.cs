@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Utils;
 
 // Simple first person flying movement
@@ -28,7 +29,7 @@ public class FirstPersonCharacterController : MonoBehaviour
         // Web gl build receive a different delta pointer movement, would be best solved with a settings screen and
         // sensitivity slider, but this will do for a prototype.
         _targetPosition = transform.position;
-        #if UNITY_WEBGL 
+        #if UNITY_WEBGL && !UNITY_EDITOR
         _lookSensitivity = _webGLLookSensitivity;
         #else
         _lookSensitivity = _pcLookSensitivity;
@@ -65,7 +66,7 @@ public class FirstPersonCharacterController : MonoBehaviour
 
     private void HandleLook()
     {
-        Vector2 look = Systems.InputSystem.LookDelta * _lookSensitivity; //TODO: not sure if this needs delta time
+        Vector2 look = Systems.InputSystem.LookDelta * _lookSensitivity;
         
         transform.Rotate(Vector3.up * look.x);
         

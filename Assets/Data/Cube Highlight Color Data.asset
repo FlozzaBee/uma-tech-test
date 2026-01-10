@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 037421c47b2bc451bbcc624773b62548, type: 3}
   m_Name: Cube Highlight Color Data
   m_EditorClassIdentifier: Assembly-CSharp::HighlightColorData
-  SelectedColorPhaseSpeed: 1.5
+  SelectedColorPhaseSpeed: 0.666
   SelectedColorA: {r: 0.5929647, g: 0.71329975, b: 0.92941177, a: 1}
   SelectedColorB: {r: 1, g: 1, b: 1, a: 1}
   HoveredColor: {r: 0.6784314, g: 1, b: 0.1843137, a: 1}
