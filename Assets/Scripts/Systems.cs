@@ -9,7 +9,7 @@ public static class Systems
 
     private static bool _initialized = false;
     
-    public static void Init(GameGridManager gameGridManager)
+    public static void Init()
     {
         if (_initialized)
         {
@@ -18,12 +18,7 @@ public static class Systems
 
         _initialized = true;
         InputSystem = new InputSystem();
-        GameGridSystem = new GameGridSystem(gameGridManager);
+        GameGridSystem = new GameGridSystem();
         SaveResumeSystem = new SaveResumeSystem();
-    }
-
-    public static void Reset()
-    {
-        _initialized = false;
     }
 }

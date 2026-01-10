@@ -164,10 +164,7 @@ public class Polycube : MonoBehaviour
     {
         return _cubeOffsets;
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
+    
     /// <param name="rotationAxis">vector to rotate around. always rotates 90 degrees clockwise</param>
     public void RotateAroundPivot(Vector3 rotationAxis)
     {

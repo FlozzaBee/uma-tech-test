@@ -13,6 +13,7 @@ public class SaveResumeSystem
         public Vector3Int[] CubeOffsets;
     }
 
+    [System.Serializable]
     public class SaveData
     {
         public PolycubeSaveData[] Polycubes;
@@ -20,8 +21,7 @@ public class SaveResumeSystem
     
     public SaveResumeSystem()
     {
-        // SaveState();
-        // TryLoadState();
+        TryLoadState();
     }
     
     public void SaveState()
@@ -59,11 +59,9 @@ public class SaveResumeSystem
         {
             File.Delete(path);
         }
-
-        Systems.Reset();
-        int index =SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(index);
         
+        int index = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(index);
     }
 
     private SaveData PopulateSaveData()

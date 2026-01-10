@@ -1,12 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameGridSystem
 {
-    public Vector3Int GridSize => _gameGridManager.GridSize;
+    public Vector3Int GridSize => GameGridManager.GridSize;
     public Polycube[] Polycubes;
 
+    private GameGridManager GameGridManager
+    {
+        get
+        {
+            if (_gameGridManager == null)
+            {
+                _gameGridManager = Object.FindFirstObjectByType<GameGridManager>();
+            }
+
+            return _gameGridManager;
+        }
+    }
+
     private GameGridManager _gameGridManager;
+    private bool _firstSceneOpen = true;
     
     private struct Cell
     {
@@ -16,14 +31,31 @@ public class GameGridSystem
     // 3d array of cells
     private Cell[,,] _cells;
 
-    public GameGridSystem(GameGridManager gameGameGridManager)
+    public GameGridSystem()
     {
-        _gameGridManager = gameGameGridManager;
-        Polycubes = gameGameGridManager.GetExistingPolycubes();
-        
+        Init();
+
+        SceneManager.activeSceneChanged += OnSceneChanged;
+    }
+
+    // On scene reload, probably wouldn't need this in a more production ready game, but for this prototype it's
+    // useful to reload the default scene
+    private void OnSceneChanged(Scene arg0, Scene scene)
+    {
+        // Dont trigger on first game start
+        if (_firstSceneOpen)
+        {
+            _firstSceneOpen = false;
+            return;
+        }
+        _gameGridManager = null;
+        Init();
+    }
+
+    private void Init()
+    {
         _cells = new Cell[GridSize.x, GridSize.y, GridSize.z];
-        
-        // Populate grid from existing polycubes
+        Polycubes = GameGridManager.GetExistingPolycubes();
         InitPolycubes();
     }
 
@@ -75,7 +107,7 @@ public class GameGridSystem
         // Reset the grid
         _cells = new Cell[GridSize.x, GridSize.y, GridSize.z];
         
-        Polycubes = _gameGridManager.LoadPolycubeStates(saveData);
+        Polycubes = GameGridManager.LoadPolycubeStates(saveData);
         
         InitPolycubes();
     }

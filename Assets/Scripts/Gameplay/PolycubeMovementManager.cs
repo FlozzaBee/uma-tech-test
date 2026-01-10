@@ -43,6 +43,11 @@ public class PolycubeMovementManager : MonoBehaviour
     {
         if (_isMovingPolycube)
         {
+            // End interaction if polycube becomes null (i.e. if destroyed by loading a save)
+            if (_currentlyHeldPolycube == null)
+            {
+                OnInteract();
+            }
             // Cast ray through grid, finding all unoccupied cells along the ray
             _lastCellAlongRay = GetFurthestCellAlongRay();
 
@@ -59,6 +64,10 @@ public class PolycubeMovementManager : MonoBehaviour
                     break;
                 }
             }
+            
+            // Set rotation visualiser position
+            RotationVisualiser.Instance.transform.position =
+                _currentlyHeldPolycube.transform.position + _currentlyHeldPolycube.GetPivotOffset();
         }
         else
         {
@@ -85,6 +94,14 @@ public class PolycubeMovementManager : MonoBehaviour
         }
     }
     
+    public void ForceEndInteract()
+    {
+        if (_isMovingPolycube)
+        {
+            OnInteract();
+        }
+    }
+    
     private void OnInteract()
     {
         if (_isMovingPolycube)
@@ -96,7 +113,10 @@ public class PolycubeMovementManager : MonoBehaviour
         }
         else
         {
-            _currentlyHoveredPolycube?.IsHoveredOver(false);
+            if (_currentlyHoveredPolycube != null)
+            {
+                _currentlyHoveredPolycube.IsHoveredOver(false);
+            }
             _currentlyHoveredPolycube = null;
             Ray ray = new Ray(_cam.transform.position, _cam.transform.forward);
             if (Physics.Raycast(ray, out var hit))
@@ -117,6 +137,7 @@ public class PolycubeMovementManager : MonoBehaviour
         if (_isMovingPolycube)
         {
             _currentlyHeldPolycube.RotateAroundPivot(Vector3.right);
+            RotationVisualiser.Instance.VisualiseRotation(RotationVisualiser.Axis.X);
         }
     }
     
@@ -125,6 +146,7 @@ public class PolycubeMovementManager : MonoBehaviour
         if (_isMovingPolycube)
         {
             _currentlyHeldPolycube.RotateAroundPivot(Vector3.up);
+            RotationVisualiser.Instance.VisualiseRotation(RotationVisualiser.Axis.Y);
         }
     }
     
@@ -133,6 +155,7 @@ public class PolycubeMovementManager : MonoBehaviour
         if (_isMovingPolycube)
         {
             _currentlyHeldPolycube.RotateAroundPivot(Vector3.forward);
+            RotationVisualiser.Instance.VisualiseRotation(RotationVisualiser.Axis.Z);
         }
     }
 

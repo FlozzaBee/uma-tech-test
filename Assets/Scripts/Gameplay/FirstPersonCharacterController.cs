@@ -28,7 +28,7 @@ public class FirstPersonCharacterController : MonoBehaviour
         // Web gl build receive a different delta pointer movement, would be best solved with a settings screen and
         // sensitivity slider, but this will do for a prototype.
         _targetPosition = transform.position;
-        #if UNITY_WEBGL && !UNITY_EDITOR
+        #if UNITY_WEBGL 
         _lookSensitivity = _webGLLookSensitivity;
         #else
         _lookSensitivity = _pcLookSensitivity;
@@ -69,7 +69,7 @@ public class FirstPersonCharacterController : MonoBehaviour
         
         transform.Rotate(Vector3.up * look.x);
         
-        _pitch -= look.y * _lookSensitivity;
+        _pitch -= look.y;
         _pitch = Mathf.Clamp(_pitch, -_maxPitch, _maxPitch);
 
         _cam.transform.localEulerAngles = new Vector3(_pitch, 0, 0);
