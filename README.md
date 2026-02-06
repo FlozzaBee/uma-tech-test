@@ -1,4 +1,5 @@
 Tech test for Uma games
+Tech test duration: approx 10 hrs
 
 Play the webGL build here:
 https://flozza-bee.itch.io/uma-tech-test
